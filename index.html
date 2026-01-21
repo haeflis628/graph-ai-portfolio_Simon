@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Simon Haefliger — Generative AI for Work & Research</title>
+  <meta name="description" content="One-page portfolio for the Generative AI for Work & Research course: background, course overview, and weekly submissions." />
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.085);
+      --text:#EAF0FF;
+      --muted: rgba(234,240,255,.74);
+      --muted2: rgba(234,240,255,.58);
+      --line: rgba(234,240,255,.12);
+      --shadow: 0 18px 55px rgba(0,0,0,.38);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 22px;
+      --radius2: 16px;
+      --accent1:#7C3AED; /* violet */
+      --accent2:#22C55E; /* green */
+      --accent3:#06B6D4; /* cyan */
+      --accent4:#F59E0B; /* amber */
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    /* Optional light mode (kept elegant + high-contrast) */
+    [data-theme="light"]{
+      --bg0:#F8FAFF;
+      --bg1:#EEF2FF;
+      --card: rgba(10,18,40,.06);
+      --card2: rgba(10,18,40,.08);
+      --text:#081027;
+      --muted: rgba(8,16,39,.76);
+      --muted2: rgba(8,16,39,.60);
+      --line: rgba(8,16,39,.12);
+      --shadow: 0 18px 55px rgba(8,16,39,.16);
+      --shadow2: 0 10px 30px rgba(8,16,39,.12);
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(124,58,237,.35), transparent 60%),
+        radial-gradient(900px 550px at 90% 10%, rgba(6,182,212,.28), transparent 65%),
+        radial-gradient(900px 650px at 55% 105%, rgba(34,197,94,.22), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ text-decoration: underline; text-decoration-color: rgba(255,255,255,.35); }
+
+    .wrap{ width:min(1120px, calc(100% - 44px)); margin: 0 auto; }
+
+    /* Top bar */
+    .topbar{
+      position: sticky;
+      top:0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(0,0,0,.34), rgba(0,0,0,.10));
+      border-bottom: 1px solid var(--line);
+    }
+    [data-theme="light"] .topbar{ background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.45)); }
+
+    .topbar-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding: 14px 0;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 220px;
+    }
+
+    .logo{
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background:
+        radial-gradient(10px 10px at 25% 25%, rgba(255,255,255,.95), rgba(255,255,255,0) 65%),
+        conic-gradient(from 210deg, var(--accent1), var(--accent3), var(--accent2), var(--accent4), var(--accent1));
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.22);
+    }
+
+    .brand h1{
+      font-size: 14px;
+      line-height: 1.1;
+      margin:0;
+      letter-spacing: .3px;
+      font-weight: 680;
+    }
+    .brand .sub{
+      font-size: 12px;
+      color: var(--muted2);
+      margin-top: 2px;
+      letter-spacing: .2px;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      transition: transform .12s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+    }
+    .pill:hover{ transform: translateY(-1px); background: rgba(255,255,255,.075); border-color: rgba(234,240,255,.18); }
+
+    .pill .dot{
+      width:8px; height:8px; border-radius:99px;
+      background: linear-gradient(135deg, var(--accent3), var(--accent1));
+      box-shadow: 0 0 0 3px rgba(6,182,212,.18);
+    }
+
+    .icon-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      cursor:pointer;
+      transition: transform .12s ease, background .2s ease;
+    }
+    .icon-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.075); }
+
+    /* Hero */
+    header.hero{
+      padding: 84px 0 22px;
+      position: relative;
+    }
+
+    .hero-cover{ padding-top: 86px; }
+
+    .browser-frame{
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      box-shadow: var(--shadow);
+    }
+
+    .browser-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+
+    .traffic{ display:flex; align-items:center; gap: 7px; }
+    .t{ width: 10px; height: 10px; border-radius: 99px; display:inline-block; }
+    .t.red{ background: rgba(239,68,68,.9); }
+    .t.yellow{ background: rgba(245,158,11,.92); }
+    .t.green{ background: rgba(34,197,94,.92); }
+
+    .omnibox{
+      flex: 1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted2);
+      max-width: 520px;
+    }
+
+    .omnibox .lock{ font-size: 12px; opacity: .8; }
+    .omnibox .url{ font-family: var(--mono); font-size: 12px; letter-spacing: .2px; }
+
+    .chrome-icons{ display:flex; align-items:center; gap: 8px; }
+    .ci{ width: 18px; height: 18px; border-radius: 8px; border: 1px solid var(--line); background: rgba(255,255,255,.045); }
+
+    .cover{
+      position: relative;
+      min-height: 520px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 38px 18px;
+    }
+
+    .cover-bg{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(1200px 540px at 10% 10%, rgba(124,58,237,.28), transparent 62%),
+        radial-gradient(900px 520px at 90% 20%, rgba(6,182,212,.22), transparent 65%),
+        radial-gradient(900px 640px at 50% 110%, rgba(34,197,94,.18), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+      filter: saturate(0.35) contrast(1.05) brightness(1.06);
+      transform: scale(1.06);
+    }
+
+    .cover-overlay{
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,.52), rgba(0,0,0,.55));
+      opacity: .58;
+    }
+
+    [data-theme="light"] .cover-overlay{ background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.62)); opacity: .75; }
+
+    .cover-center{
+      position: relative;
+      text-align:center;
+      padding: 20px 18px 10px;
+    }
+
+    .avatar{
+      width: 118px;
+      height: 118px;
+      border-radius: 999px;
+      margin: 0 auto 14px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.22);
+      box-shadow: 0 22px 60px rgba(0,0,0,.38);
+      display:grid;
+      place-items:center;
+    }
+
+    .avatar-inner{
+      width: 102px;
+      height: 102px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      background:
+        radial-gradient(18px 18px at 30% 25%, rgba(255,255,255,.95), rgba(255,255,255,0) 65%),
+        conic-gradient(from 210deg, var(--accent1), var(--accent3), var(--accent2), var(--accent4), var(--accent1));
+      border: 1px solid rgba(255,255,255,.26);
+    }
+
+    .avatar-inner span{
+      font-family: var(--mono);
+      font-weight: 800;
+      letter-spacing: .5px;
+      color: rgba(255,255,255,.95);
+      text-shadow: 0 10px 28px rgba(0,0,0,.35);
+    }
+
+    [data-theme="light"] .avatar-inner span{ color: rgba(8,16,39,.92); text-shadow: none; }
+
+    .cover-name{
+      margin: 0 0 10px;
+      font-size: clamp(34px, 5vw, 64px);
+      letter-spacing: -0.9px;
+      line-height: 1.02;
+      font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+      font-weight: 520;
+    }
+
+    .cover-sub{
+      margin: 0 0 18px;
+      color: rgba(234,240,255,.78);
+      font-size: 15px;
+      letter-spacing: .2px;
+    }
+
+    [data-theme="light"] .cover-sub{ color: rgba(8,16,39,.68); }
+
+    .cover-actions{
+      display:flex;
+      gap: 10px;
+      justify-content:center;
+      flex-wrap: wrap;
+    }
+
+    .cover-link{
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,240,255,.88);
+      transition: transform .12s ease, background .2s ease, border-color .2s ease;
+      font-size: 13px;
+      font-weight: 620;
+    }
+
+    .cover-link:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.30);
+      text-decoration:none;
+    }
+
+    [data-theme="light"] .cover-link{ color: rgba(8,16,39,.86); border-color: rgba(8,16,39,.18); background: rgba(8,16,39,.04); }
+    [data-theme="light"] .cover-link:hover{ background: rgba(8,16,39,.06); border-color: rgba(8,16,39,.22); }
+
+    .hero-below{ margin-top: 14px; display:flex; justify-content:center; }
+
+    .hero-note{
+      width: min(860px, 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      text-align:center;
+    }
+
+    @media (max-width: 560px){
+      .omnibox{ display:none; }
+      .cover{ min-height: 470px; }
+    }
+
+    /* Sections */
+    section{ padding: 30px 0; }
+
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .section-head h2{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:-.25px;
+    }
+    .section-head p{ margin:0; color: var(--muted2); font-size: 13px; max-width: 70ch; }
+
+    .grid3{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .grid2{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    @media (max-width: 980px){ .grid3{ grid-template-columns: 1fr; } .grid2{ grid-template-columns: 1fr; } }
+
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      padding: 16px;
+      box-shadow: var(--shadow2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(380px 220px at 10% 0%, rgba(245,158,11,.14), transparent 60%),
+        radial-gradient(420px 260px at 90% 35%, rgba(124,58,237,.14), transparent 65%);
+      opacity: .9;
+      pointer-events:none;
+    }
+    .card > *{ position: relative; }
+
+    .card h3{ margin: 2px 0 6px; font-size: 15px; letter-spacing:.1px; }
+    .card p{ margin: 0; color: var(--muted); line-height: 1.55; font-size: 13px; }
+
+    .chiprow{ display:flex; flex-wrap:wrap; gap: 8px; margin-top: 12px; }
+    .chip{
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+    }
+
+    /* Timeline */
+    .timeline{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      overflow:hidden;
+      box-shadow: var(--shadow2);
+    }
+
+    .timeline .row{
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0;
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+      position: relative;
+    }
+    .timeline .row:first-child{ border-top: none; }
+
+    .timeline .wk{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted2);
+      letter-spacing: .2px;
+    }
+
+    .timeline .content{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timeline h4{ margin: 0 0 4px; font-size: 14px; }
+    .timeline p{ margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; max-width: 80ch; }
+
+    .status{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .status.todo{ border-color: rgba(245,158,11,.25); background: rgba(245,158,11,.07); }
+    .status.done{ border-color: rgba(34,197,94,.25); background: rgba(34,197,94,.07); }
+
+    /* Footer */
+    footer{
+      padding: 26px 0 40px;
+      border-top: 1px solid var(--line);
+      margin-top: 22px;
+    }
+    .foot{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      color: var(--muted2);
+      font-size: 13px;
+    }
+
+    .smalllinks{ display:flex; gap: 12px; flex-wrap:wrap; }
+
+    /* Accessibility */
+    .skip{
+      position:absolute;
+      left:-999px;
+      top:auto;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+    }
+    .skip:focus{
+      left: 14px;
+      top: 14px;
+      width:auto;
+      height:auto;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.7);
+      border: 1px solid rgba(255,255,255,.22);
+      z-index: 999;
+    }
+
+    /* Subtle animated background grain */
+    .grain{
+      pointer-events:none;
+      position: fixed;
+      inset: 0;
+      opacity: .08;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
+      transform: translateZ(0);
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      .pill, .btn, .icon-btn{ transition:none; }
+      .grain{ display:none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="topbar" style="position:fixed; width:100%;">
+    <div class="wrap topbar-inner" style="padding: 10px 0;">
+      <div class="brand" aria-label="Site title">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Simon Haefliger</h1>
+          <div class="sub">Generative AI for Work & Research</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a class="pill" href="#about"><span class="dot" aria-hidden="true"></span>About</a>
+        <a class="pill" href="#course"><span class="dot" aria-hidden="true"></span>Course</a>
+        <a class="pill" href="#submissions"><span class="dot" aria-hidden="true"></span>Weekly work</a>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle theme" title="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M21 14.5C19.2 15.4 17.1 15.7 15.1 15.2C13.1 14.7 11.3 13.4 10.2 11.6C9.1 9.8 8.7 7.6 9.2 5.6C9.4 4.8 9.7 4 10.1 3.3C7.8 3.7 5.8 5.1 4.6 7C3.4 8.9 3.1 11.3 3.8 13.4C4.6 15.6 6.4 17.3 8.7 18C11 18.7 13.4 18.4 15.4 17.1C17.4 15.9 18.8 13.9 19.2 11.6C19.7 12 20.4 12.8 21 14.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <header class="hero hero-cover" id="top">
+    <div class="wrap">
+      <div class="browser-frame" role="img" aria-label="Hero header styled like a browser window">
+        <div class="browser-top">
+          <div class="traffic" aria-hidden="true">
+            <span class="t red"></span><span class="t yellow"></span><span class="t green"></span>
+          </div>
+          <div class="omnibox" aria-hidden="true">
+            <span class="lock">&#128274;</span>
+            <span class="url">simonhaefliger.me</span>
+          </div>
+          <div class="chrome-icons" aria-hidden="true">
+            <span class="ci"></span><span class="ci"></span><span class="ci"></span>
+          </div>
+        </div>
+
+        <div class="cover">
+          <div class="cover-bg" aria-hidden="true"></div>
+          <div class="cover-overlay" aria-hidden="true"></div>
+
+          <div class="cover-center">
+            <div class="avatar" aria-hidden="true">
+              <div class="avatar-inner">
+                <span>SH</span>
+              </div>
+            </div>
+
+            <h2 class="cover-name">Simon Haefliger</h2>
+            <p class="cover-sub">Generative AI for Work & Research · Course Portfolio</p>
+
+            <div class="cover-actions">
+              <a class="cover-link" href="#about">About</a>
+              <a class="cover-link" href="#course">Course</a>
+              <a class="cover-link" href="#submissions">Weekly submissions</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-below">
+        <div class="hero-note">
+          <span class="spark" aria-hidden="true"></span>
+          <span>MD-PhD · Pathology & spatial-omics · Building responsible GenAI workflows for research</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- About -->
+    <section id="about">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>About me</h2>
+            <p>Clinical background + research mindset — building practical AI workflows for biomedical research and scientific communication.</p>
+          </div>
+        </div>
+
+        <div class="grid3">
+          <div class="card">
+            <h3>Current roles</h3>
+            <p>
+              MD‑PhD student at the University of Zurich & ETH Zurich (Bodenmiller lab). Part‑time clinical manager at Navignostics AG.
+            </p>
+            <div class="chiprow">
+              <span class="chip">UZH · ETH</span>
+              <span class="chip">Spatial biology</span>
+              <span class="chip">Translational research</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Clinical training</h3>
+            <p>
+              Board‑certified (FMH) in surgical pathology and molecular pathology, with clinical fellowship experience at UCL Cancer Institute.
+            </p>
+            <div class="chiprow">
+              <span class="chip">FMH Surgical Pathology</span>
+              <span class="chip">FMH Molecular Pathology</span>
+              <span class="chip">UCL Fellowship</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Tooling & strengths</h3>
+            <p>
+              Advanced programming and analysis skills (R, Python, Bash). Bilingual (French/German) with advanced English.
+            </p>
+            <div class="chiprow">
+              <span class="chip">R</span>
+              <span class="chip">Python</span>
+              <span class="chip">Bash</span>
+              <span class="chip">Scientific writing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Course -->
+    <section id="course">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>About the course</h2>
+            <p>
+              An 8‑week live cohort on no‑code AI tools for responsible task automation — spanning writing, analysis, text mining,
+              custom GPTs/chatbots, workflow automation, and research communication.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="card">
+            <h3>Bootcamp features</h3>
+            <p>
+              Weekly workshops and help sessions, private community forums, personalized feedback, capstone coaching,
+              a shareable certificate, and lifetime tutorial access.
+            </p>
+            <div class="chiprow">
+              <span class="chip">Live workshops</span>
+              <span class="chip">Help sessions</span>
+              <span class="chip">Capstone coaching</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Grading rubric</h3>
+            <p>
+              Online quizzes (15%), workshop assignments (35%), attendance & participation (10%), final project (40%).
+              Passing grade: 80% (with attendance expectations).
+            </p>
+            <div class="chiprow">
+              <span class="chip">Quizzes</span>
+              <span class="chip">Assignments</span>
+              <span class="chip">Final project</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="card" style="padding: 18px;">
+          <h3 style="margin-top:0">Modules (high‑level)</h3>
+          <p style="margin-bottom: 14px;">A compact view of what we cover — designed for practical, responsible use in real work and research.</p>
+
+          <div class="grid3" style="gap:12px;">
+            <div class="card" style="padding:14px; border-radius:18px;">
+              <h3 style="font-size:14px; margin:0 0 6px;">Module 1</h3>
+              <p>Websites, documents & presentations (Markdown/LaTeX/HTML, simple research sites, AI‑assisted slides).</p>
+            </div>
+            <div class="card" style="padding:14px; border-radius:18px;">
+              <h3 style="font-size:14px; margin:0 0 6px;">Module 2</h3>
+              <p>AI‑automated data analysis (datasets, dashboards, batch file processing, automated reporting).</p>
+            </div>
+            <div class="card" style="padding:14px; border-radius:18px;">
+              <h3 style="font-size:14px; margin:0 0 6px;">Module 3</h3>
+              <p>GenAI for research & text analysis (literature review, classification, synthesis workflows).</p>
+            </div>
+            <div class="card" style="padding:14px; border-radius:18px;">
+              <h3 style="font-size:14px; margin:0 0 6px;">Module 4</h3>
+              <p>Custom GPTs & chatbots (RAG, knowledge bases, integrations, Botpress workflows).</p>
+            </div>
+            <div class="card" style="padding:14px; border-radius:18px;">
+              <h3 style="font-size:14px; margin:0 0 6px;">Module 5</h3>
+              <p>AI for task automation (agents, email workflows, app‑to‑app orchestration, browser control).</p>
+            </div>
+            <div class="card" style="padding:14px; border-radius:18px;">
+              <h3 style="font-size:14px; margin:0 0 6px;">Module 6–7</h3>
+              <p>Communication & outreach → capstone project & showcase (responsible dissemination, final presentations).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Weekly Submissions -->
+    <section id="submissions">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>My weekly submissions</h2>
+            <p>
+              Placeholders for now — we’ll add links to each submission as they become available.
+              Each item includes a short note to capture intent, tooling, and what I’d improve next.
+            </p>
+          </div>
+          <a class="pill" href="#" id="expandAll"><span class="dot" aria-hidden="true"></span>Expand all</a>
+        </div>
+
+        <div class="timeline" role="list">
+          <!-- Week 1 -->
+          <div class="row" role="listitem">
+            <div class="wk">Week 01</div>
+            <div class="content">
+              <div>
+                <h4>Websites, documents & presentations</h4>
+                <p>Built a clean project website draft and tested structured writing prompts for Markdown/LaTeX outputs.</p>
+              </div>
+              <span class="status todo">Placeholder · link later</span>
+            </div>
+          </div>
+          <!-- Week 2 -->
+          <div class="row" role="listitem">
+            <div class="wk">Week 02</div>
+            <div class="content">
+              <div>
+                <h4>AI‑assisted data exploration</h4>
+                <p>Used AI tools to validate basic data summaries, generate plots, and document assumptions + limitations.</p>
+              </div>
+              <span class="status todo">Placeholder · link later</span>
+            </div>
+          </div>
+          <!-- Week 3 -->
+          <div class="row" role="listitem">
+            <div class="wk">Week 03</div>
+            <div class="content">
+              <div>
+                <h4>Literature & text synthesis workflow</h4>
+                <p>Prototyped a fast literature triage pipeline (search → screening → structured summaries → evidence table).</p>
+              </div>
+              <span class="status todo">Placeholder · link later</span>
+            </div>
+          </div>
+          <!-- Week 4 -->
+          <div class="row" role="listitem">
+            <div class="wk">Week 04</div>
+            <div class="content">
+              <div>
+                <h4>Custom GPT / knowledge assistant</h4>
+                <p>Designed a domain‑specific assistant with guardrails (citation habit, uncertainty notes, and safe defaults).</p>
+              </div>
+              <span class="status todo">Placeholder · link later</span>
+            </div>
+          </div>
+          <!-- Week 5 -->
+          <div class="row" role="listitem">
+            <div class="wk">Week 05</div>
+            <div class="content">
+              <div>
+                <h4>Task automation & agents</h4>
+                <p>Drafted an automation map for recurring research tasks (data ingestion, QC, reporting, communication).</p>
+              </div>
+              <span class="status todo">Placeholder · link later</span>
+            </div>
+          </div>
+          <!-- Week 6 -->
+          <div class="row" role="listitem">
+            <div class="wk">Week 06</div>
+            <div class="content">
+              <div>
+                <h4>Communication & outreach assets</h4>
+                <p>Created AI‑assisted figure captions and audience‑tailored summaries while tracking what was AI‑generated.</p>
+              </div>
+              <span class="status todo">Placeholder · link later</span>
+            </div>
+          </div>
+          <!-- Week 7 -->
+          <div class="row" role="listitem">
+            <div class="wk">Week 07</div>
+            <div class="content">
+              <div>
+                <h4>Capstone progress check</h4>
+                <p>Iterated on the capstone prototype and incorporated peer/instructor feedback into a clearer MVP plan.</p>
+              </div>
+              <span class="status todo">Placeholder · link later</span>
+            </div>
+          </div>
+          <!-- Week 8 -->
+          <div class="row" role="listitem">
+            <div class="wk">Week 08</div>
+            <div class="content">
+              <div>
+                <h4>Final project & showcase</h4>
+                <p>Prepared the final demo and short narrative: problem → workflow → validation → limitations → next steps.</p>
+              </div>
+              <span class="status todo">Placeholder · link later</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="grid2">
+          <div class="card">
+            <h3>Capstone idea (placeholder)</h3>
+            <p>
+              A responsible “research operations” workflow: inputs (papers/data) → structured extraction → QC checkpoints →
+              auto‑drafted reports → human review → export to docs/slides.
+            </p>
+            <div class="chiprow">
+              <span class="chip">Reproducibility</span>
+              <span class="chip">Human‑in‑the‑loop</span>
+              <span class="chip">Audit trail</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Transparency note</h3>
+            <p>
+              This portfolio intentionally avoids publishing personal contact details.
+              When links are added, each submission will include a short “AI usage” disclosure and validation notes.
+            </p>
+            <div class="chiprow">
+              <span class="chip">Disclosure</span>
+              <span class="chip">Validation</span>
+              <span class="chip">Attribution</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap foot">
+        <div>
+          <strong style="color: var(--text);">Simon Haefliger</strong>
+          <span style="color: var(--muted2);"> · Generative AI for Work & Research portfolio</span>
+        </div>
+        <div class="smalllinks">
+          <a href="#about">About</a>
+          <a href="#course">Course</a>
+          <a href="#submissions">Weekly work</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function(){
+      const root = document.documentElement;
+      const btn = document.getElementById('themeBtn');
+      const key = 'ga4wr_theme';
+
+      function setTheme(t){
+        if(t === 'light') root.setAttribute('data-theme','light');
+        else root.removeAttribute('data-theme');
+        try{ localStorage.setItem(key, t); }catch(e){}
+      }
+
+      // Initialize theme
+      let saved = null;
+      try{ saved = localStorage.getItem(key); }catch(e){}
+      if(saved){ setTheme(saved); }
+      else{
+        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        if(prefersLight) setTheme('light');
+      }
+
+      btn?.addEventListener('click', () => {
+        const isLight = root.getAttribute('data-theme') === 'light';
+        setTheme(isLight ? 'dark' : 'light');
+      });
+
+      // "Expand all" just nudges the user down the list (kept simple for placeholders)
+      const exp = document.getElementById('expandAll');
+      exp?.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector('#submissions')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      // Focus styles for keyboard users
+      function addKeyboardClass(e){
+        if(e.key === 'Tab') document.body.classList.add('kbd');
+      }
+      window.addEventListener('keydown', addKeyboardClass, { once:true });
+    })();
+  </script>
+</body>
+</html>
